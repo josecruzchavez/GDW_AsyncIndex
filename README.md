@@ -6,10 +6,16 @@ asíncrona. Las solicitudes se agregan a una cola y el cron de Magento procesa
 los trabajos, evitando ejecutar operaciones largas dentro de la solicitud del
 administrador.
 
-## Compatibilidad
+## Compatibilidad por rama
 
-- Magento Open Source / Adobe Commerce 2.4.2 a 2.4.3.
-- PHP 7.4.
+| Rama | Magento Open Source / Adobe Commerce | PHP | GDW_Core | Requisito Composer |
+| --- | --- | --- | --- | --- |
+| [4.4.x](https://github.com/josecruzchavez/GDW_AsyncIndex/tree/4.4.x) | 2.4.4 o posterior | 8.1 o posterior | `^4.4` | `gdw/asyncindex:^4.4` |
+| [4.x](https://github.com/josecruzchavez/GDW_AsyncIndex/tree/4.x) | 2.4.2–2.4.3 | 7.4 | `^4.0` | `gdw/asyncindex:^4.0` |
+| [3.x](https://github.com/josecruzchavez/GDW_AsyncIndex/tree/3.x) | 2.3.7, incluidos sus parches de seguridad | 7.4 | `^3.0` | `gdw/asyncindex:^3.0` |
+
+La rama 4.x comienza en Magento 2.4.2 porque GDW_Core 4.x requiere
+`magento/framework >=103.0.0`.
 
 ## Funciones destacadas
 
