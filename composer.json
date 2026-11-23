@@ -2,7 +2,7 @@
   "name": "gdw/asyncindex",
   "description": "Asynchronous index management for Magento 2",
   "type": "magento2-module",
-  "version": "4.0.0",
+  "version": "3.0.0",
   "license": "proprietary",
   "authors": [
     {
@@ -13,8 +13,8 @@
   ],
   "require": {
     "php": ">=7.4 <8.0",
-    "gdw/core": "^4.0",
-    "magento/framework": ">=103.0.0 <103.0.4"
+    "gdw/core": "^3.0",
+    "magento/framework": ">=102.0.0 <103.0.0"
   },
   "autoload": {
     "files": [
