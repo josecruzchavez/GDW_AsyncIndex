@@ -4,6 +4,9 @@ declare(strict_types=1);
 namespace GDW\AsyncIndex\Test\Unit\Model;
 
 use GDW\AsyncIndex\Model\Job;
+use GDW\AsyncIndex\Model\ResourceModel\Job as JobResource;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
 use PHPUnit\Framework\TestCase;
 
 class JobTest extends TestCase
@@ -49,7 +52,7 @@ class JobTest extends TestCase
 
     public function testIndexerIdsAreSerializedAndReadBackAsStrings(): void
     {
-        $job = new Job();
+        $job = $this->createJob();
         $job->setIndexerIds(['catalog_product', 'catalog_category']);
 
         self::assertSame(['catalog_product', 'catalog_category'], $job->getIndexerIds());
@@ -57,9 +60,21 @@ class JobTest extends TestCase
 
     public function testInvalidIndexerIdsPayloadReturnsEmptyArray(): void
     {
-        $job = new Job();
+        $job = $this->createJob();
         $job->setData('indexer_ids', '{"invalid":true}');
 
         self::assertSame([], $job->getIndexerIds());
+    }
+
+    private function createJob(): Job
+    {
+        $resource = $this->createMock(JobResource::class);
+        $resource->method('getIdFieldName')->willReturn('job_id');
+
+        return new Job(
+            $this->createMock(Context::class),
+            $this->createMock(Registry::class),
+            $resource
+        );
     }
 }

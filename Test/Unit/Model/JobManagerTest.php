@@ -13,6 +13,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Lock\LockManagerInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Indexer\Model\Indexer\CollectionFactory as IndexerCollectionFactory;
 use PHPUnit\Framework\TestCase;
@@ -67,7 +69,14 @@ class JobManagerTest extends TestCase
 
     private function createJob(string $status): Job
     {
-        return (new Job())
+        $resource = $this->createMock(JobResource::class);
+        $resource->method('getIdFieldName')->willReturn('job_id');
+
+        return (new Job(
+            $this->createMock(Context::class),
+            $this->createMock(Registry::class),
+            $resource
+        ))
             ->setId(42)
             ->setData('status', $status)
             ->setData('message', 'Previous message')
