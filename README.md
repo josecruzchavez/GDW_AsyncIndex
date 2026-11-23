@@ -40,7 +40,7 @@ baja a los trabajos.
 > procesar pendientes e invalidar indexadores. La edición Pro potencia estas
 > funciones con más control y herramientas operativas, como seguimiento del
 > progreso, historial completo, reintentos, programaciones y comandos CLI.
-> [Conoce GDW_AsyncIndexPro](https://github.com/josecruzchavez/GDW_AsyncIndexPro#readme).
+> [Conoce GDW_AsyncIndexPro](https://gdw.mx/modulos/gdw-asyncindexpro/).
 
 ## Comparativa Free vs Pro
 

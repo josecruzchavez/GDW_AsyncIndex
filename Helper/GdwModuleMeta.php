@@ -16,7 +16,7 @@ final class GdwModuleMeta
             'repo_url' => 'https://github.com/josecruzchavez/GDW_AsyncIndex',
             'docs_url' => 'https://docs.gdw.mx/modulos/gdw_asyncindex',
             'pro_module' => 'GDW_AsyncIndexPro',
-            'pro_url' => 'https://docs.gdw.mx/modulos/gdw_asyncindexpro',
+            'pro_url' => 'https://gdw.mx/modulos/gdw-asyncindexpro/',
         ];
     }
 }
