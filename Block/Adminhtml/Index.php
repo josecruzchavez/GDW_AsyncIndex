@@ -8,13 +8,17 @@ use Magento\Backend\Block\Template;
 
 class Index extends Template
 {
+    private JobManager $jobManager;
+    private CollectionFactory $collectionFactory;
     public function __construct(
         Template\Context $context,
-        private readonly JobManager $jobManager,
-        private readonly CollectionFactory $collectionFactory,
+        JobManager $jobManager,
+        CollectionFactory $collectionFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
+        $this->jobManager = $jobManager;
+        $this->collectionFactory = $collectionFactory;
     }
 
     public function getIndexerData(): array

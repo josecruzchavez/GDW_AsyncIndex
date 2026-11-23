@@ -6,13 +6,17 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Logger
 {
+    private DirectoryList $directoryList;
+    private ScopeConfigInterface $scopeConfig;
     private const XML_PATH_LOGGING_ENABLED = 'gdw/developer_asyncindex/logging_enabled';
 
     public function __construct(
-        private readonly DirectoryList $directoryList,
-        private readonly ScopeConfigInterface $scopeConfig
+        DirectoryList $directoryList,
+        ScopeConfigInterface $scopeConfig
     )
     {
+        $this->directoryList = $directoryList;
+        $this->scopeConfig = $scopeConfig;
     }
 
     public function info(string $message): void

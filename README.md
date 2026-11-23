@@ -8,8 +8,8 @@ administrador.
 
 ## Compatibilidad
 
-- Magento Open Source / Adobe Commerce 2.4.4 o posterior.
-- PHP 8.1 o posterior.
+- Magento Open Source / Adobe Commerce 2.4.2 a 2.4.3.
+- PHP 7.4.
 
 ## Funciones destacadas
 
@@ -28,7 +28,7 @@ baja a los trabajos.
 
 ## Dependencias
 
-- `GDW_Core` (`gdw/core:^4.4`)
+- `GDW_Core` (`gdw/core:^4.0`)
 - Magento Indexer
 - Magento Backend
 - Magento Cron

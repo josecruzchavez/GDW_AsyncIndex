@@ -7,12 +7,18 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class ProcessJobs
 {
+    private JobManager $jobManager;
+    private Logger $logger;
+    private ScopeConfigInterface $scopeConfig;
     public function __construct(
-        private readonly JobManager $jobManager,
-        private readonly Logger $logger,
-        private readonly ScopeConfigInterface $scopeConfig
+        JobManager $jobManager,
+        Logger $logger,
+        ScopeConfigInterface $scopeConfig
     )
     {
+        $this->jobManager = $jobManager;
+        $this->logger = $logger;
+        $this->scopeConfig = $scopeConfig;
     }
 
     public function execute(): void

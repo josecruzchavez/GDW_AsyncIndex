@@ -13,6 +13,16 @@ use Magento\Indexer\Model\Indexer\CollectionFactory as IndexerCollectionFactory;
 
 class JobManager
 {
+    private JobFactory $jobFactory;
+    private JobResource $jobResource;
+    private JobCollectionFactory $jobCollectionFactory;
+    private IndexerRegistry $indexerRegistry;
+    private IndexerCollectionFactory $indexerCollectionFactory;
+    private LockManagerInterface $lockManager;
+    private ResourceConnection $resourceConnection;
+    private DateTime $dateTime;
+    private Logger $logger;
+    private ScopeConfigInterface $scopeConfig;
     private const LOCK_NAME = 'gdw_async_index_process';
     private const DEFAULT_HISTORY_DAYS = 10;
     private const DEFAULT_STALE_AFTER_SECONDS = 7200;
@@ -28,17 +38,27 @@ class JobManager
     private const XML_PATH_STALE_AFTER_SECONDS = 'gdw/developer_asyncindex/stale_after_seconds';
 
     public function __construct(
-        private readonly JobFactory $jobFactory,
-        private readonly JobResource $jobResource,
-        private readonly JobCollectionFactory $jobCollectionFactory,
-        private readonly IndexerRegistry $indexerRegistry,
-        private readonly IndexerCollectionFactory $indexerCollectionFactory,
-        private readonly LockManagerInterface $lockManager,
-        private readonly ResourceConnection $resourceConnection,
-        private readonly DateTime $dateTime,
-        private readonly Logger $logger,
-        private readonly ScopeConfigInterface $scopeConfig
+        JobFactory $jobFactory,
+        JobResource $jobResource,
+        JobCollectionFactory $jobCollectionFactory,
+        IndexerRegistry $indexerRegistry,
+        IndexerCollectionFactory $indexerCollectionFactory,
+        LockManagerInterface $lockManager,
+        ResourceConnection $resourceConnection,
+        DateTime $dateTime,
+        Logger $logger,
+        ScopeConfigInterface $scopeConfig
     ) {
+        $this->jobFactory = $jobFactory;
+        $this->jobResource = $jobResource;
+        $this->jobCollectionFactory = $jobCollectionFactory;
+        $this->indexerRegistry = $indexerRegistry;
+        $this->indexerCollectionFactory = $indexerCollectionFactory;
+        $this->lockManager = $lockManager;
+        $this->resourceConnection = $resourceConnection;
+        $this->dateTime = $dateTime;
+        $this->logger = $logger;
+        $this->scopeConfig = $scopeConfig;
     }
 
     public function create(
@@ -376,7 +396,7 @@ class JobManager
                     ->from($table, ['count' => 'COUNT(*)'])
                     ->where('version_id > ?', $stateVersion)
             );
-        } catch (\Throwable) {
+        } catch (\Throwable $exception) {
             return 0;
         }
     }

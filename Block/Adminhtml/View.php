@@ -7,12 +7,14 @@ use Magento\Backend\Block\Template;
 
 class View extends Template
 {
+    private JobManager $jobManager;
     public function __construct(
         Template\Context $context,
-        private readonly JobManager $jobManager,
+        JobManager $jobManager,
         array $data = []
     ) {
         parent::__construct($context, $data);
+        $this->jobManager = $jobManager;
     }
 
     public function getJob(): ?Job

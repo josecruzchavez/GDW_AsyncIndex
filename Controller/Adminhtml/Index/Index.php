@@ -7,13 +7,15 @@ use Magento\Framework\View\Result\PageFactory;
 
 class Index extends Action
 {
+    private PageFactory $pageFactory;
     public const ADMIN_RESOURCE = 'GDW_AsyncIndex::index';
 
     public function __construct(
         Context $context,
-        private readonly PageFactory $pageFactory
+        PageFactory $pageFactory
     ) {
         parent::__construct($context);
+        $this->pageFactory = $pageFactory;
     }
 
     public function execute()

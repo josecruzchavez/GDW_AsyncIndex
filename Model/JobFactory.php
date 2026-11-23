@@ -3,8 +3,10 @@ namespace GDW\AsyncIndex\Model;
 
 class JobFactory
 {
-    public function __construct(private readonly \Magento\Framework\ObjectManagerInterface $objectManager)
+    private \Magento\Framework\ObjectManagerInterface $objectManager;
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
+        $this->objectManager = $objectManager;
     }
 
     public function create(array $data = []): Job

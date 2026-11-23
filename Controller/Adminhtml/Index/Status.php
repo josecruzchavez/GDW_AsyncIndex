@@ -9,15 +9,21 @@ use Magento\Framework\Controller\Result\JsonFactory;
 
 class Status extends Action
 {
+    private JsonFactory $jsonFactory;
+    private JobFactory $jobFactory;
+    private JobResource $jobResource;
     public const ADMIN_RESOURCE = 'GDW_AsyncIndex::index';
 
     public function __construct(
         Context $context,
-        private readonly JsonFactory $jsonFactory,
-        private readonly JobFactory $jobFactory,
-        private readonly JobResource $jobResource
+        JsonFactory $jsonFactory,
+        JobFactory $jobFactory,
+        JobResource $jobResource
     ) {
         parent::__construct($context);
+        $this->jsonFactory = $jsonFactory;
+        $this->jobFactory = $jobFactory;
+        $this->jobResource = $jobResource;
     }
 
     public function execute()

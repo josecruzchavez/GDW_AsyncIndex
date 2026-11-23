@@ -11,16 +11,24 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Schedule extends Action
 {
+    private JsonFactory $jsonFactory;
+    private JobManager $jobManager;
+    private Session $authSession;
+    private ScopeConfigInterface $scopeConfig;
     public const ADMIN_RESOURCE = 'GDW_AsyncIndex::index';
 
     public function __construct(
         Context $context,
-        private readonly JsonFactory $jsonFactory,
-        private readonly JobManager $jobManager,
-        private readonly Session $authSession,
-        private readonly ScopeConfigInterface $scopeConfig
+        JsonFactory $jsonFactory,
+        JobManager $jobManager,
+        Session $authSession,
+        ScopeConfigInterface $scopeConfig
     ) {
         parent::__construct($context);
+        $this->jsonFactory = $jsonFactory;
+        $this->jobManager = $jobManager;
+        $this->authSession = $authSession;
+        $this->scopeConfig = $scopeConfig;
     }
 
     public function execute()
