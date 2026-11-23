@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="gdwdeveloper">
+            <group id="asyncindex" type="text" translate="label" sortOrder="60"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Async Index</label>
+                <field id="enabled" translate="label" type="select" sortOrder="1"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Async Processing</label>
+                    <config_path>gdw/developer_asyncindex/enabled</config_path>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable asynchronous index processing. When disabled, new jobs are not queued and the cron does not process pending jobs.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

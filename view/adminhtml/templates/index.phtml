@@ -1,0 +1,295 @@
+<?php
+/** @var \GDW\AsyncIndex\Block\Adminhtml\Index $block */
+$indexers = $block->getIndexerData();
+$recentJobs = $block->getRecentJobs(10);
+$scheduleUrl = $block->getUrl('gdw_asyncindex/index/schedule');
+$statusUrl = $block->getUrl('gdw_asyncindex/index/status');
+$formKey = $block->getFormKey();
+?>
+<div class="admin__data-grid-header">
+    <div class="admin__data-grid-header-row">
+        <div class="admin__data-grid-massaction gdw-async-index-actions">
+            <label class="admin__control-support-text" for="gdw-async-index-action">
+                <?= $block->escapeHtml(__('Actions')) ?>
+            </label>
+            <select id="gdw-async-index-action" class="admin__control-select">
+                <option value="reindex"><?= $block->escapeHtml(__('Reindex')) ?></option>
+                <option value="pending"><?= $block->escapeHtml(__('Process Pending Items')) ?></option>
+                <option value="invalidate"><?= $block->escapeHtml(__('Invalidate')) ?></option>
+            </select>
+            <?= $block->getChildHtml('priority') ?>
+            <button type="button" class="action-default scalable" id="gdw-async-index-process">
+                <span><?= $block->escapeHtml(__('Process')) ?></span>
+            </button>
+            <button type="button" class="action-primary scalable" id="gdw-async-index-full">
+                <span><?= $block->escapeHtml(__('Reindex Full')) ?></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="message message-notice" id="gdw-async-index-message" hidden></div>
+<?= $block->getChildHtml('progress') ?>
+<style>
+    .gdw-async-index-actions {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem;
+    }
+
+    .gdw-async-index-actions label {
+        margin-bottom: 0;
+    }
+
+    #gdw-async-index-full {
+        margin-left: auto;
+    }
+
+    .gdw-async-index-history-header {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+    }
+
+    .gdw-async-index-history-header h2 {
+        margin: 0;
+    }
+
+    .gdw-async-index-grid tbody tr:nth-child(even) td {
+        background-color: #f8f8f8 !important;
+    }
+
+    .gdw-async-index-grid tbody tr:nth-child(odd) td {
+        background-color: #ffffff !important;
+    }
+
+    .gdw-async-index-grid tbody tr:hover td {
+        background-color: #f1f1f1 !important;
+    }
+
+    .gdw-async-index-name {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+        padding-left: .5rem;
+        white-space: normal;
+    }
+
+    .gdw-async-indexers {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+        white-space: normal;
+    }
+</style>
+<?= $block->getChildHtml('indexer.listing') ?>
+
+<div class="gdw-async-index-history-header">
+    <h2><?= $block->escapeHtml(__('Reindex History')) ?></h2>
+    <div class="page-actions">
+        <?= $block->getChildHtml('history.actions') ?>
+    </div>
+</div>
+
+<div class="admin__data-grid-wrap">
+    <table class="data-grid gdw-async-index-grid">
+        <thead>
+        <tr>
+            <th class="data-grid-th"><?= $block->escapeHtml(__('ID')) ?></th>
+            <th class="data-grid-th"><?= $block->escapeHtml(__('Action')) ?></th>
+            <th class="data-grid-th"><?= $block->escapeHtml(__('Indexers')) ?></th>
+            <th class="data-grid-th"><?= $block->escapeHtml(__('Status')) ?></th>
+            <th class="data-grid-th"><?= $block->escapeHtml(__('Progress')) ?></th>
+            <th class="data-grid-th"><?= $block->escapeHtml(__('Created')) ?></th>
+            <th class="data-grid-th"><?= $block->escapeHtml(__('Started')) ?></th>
+            <th class="data-grid-th"><?= $block->escapeHtml(__('Finished')) ?></th>
+            <th class="data-grid-th"><?= $block->escapeHtml(__('Duration')) ?></th>
+            <th class="data-grid-th"><?= $block->escapeHtml(__('Message')) ?></th>
+            <th class="data-grid-th"><?= $block->escapeHtml(__('Error')) ?></th>
+        </tr>
+        </thead>
+        <tbody id="gdw-async-index-history">
+        <?php foreach ($recentJobs as $job): ?>
+            <tr data-job-id="<?= (int)$job->getId() ?>">
+                <td><?= (int)$job->getId() ?></td>
+                <td><?= $block->escapeHtml($block->getActionLabel((string)$job->getData('action_type'))) ?></td>
+                <td>
+                    <span class="gdw-async-indexers"
+                          title="<?= $block->escapeHtmlAttr(implode(', ', $job->getIndexerIds())) ?>">
+                        <?= $block->escapeHtml(implode(', ', $job->getIndexerIds())) ?>
+                    </span>
+                </td>
+                <td class="job-status"><?= $block->escapeHtml($block->getStatusLabel((string)$job->getData('status'))) ?></td>
+                <td class="job-progress"><?= (int)$job->getData('progress') ?>%</td>
+                <td><?= $block->escapeHtml($job->getData('created_at')) ?></td>
+                <td><?= $block->escapeHtml($job->getData('started_at')) ?></td>
+                <td><?= $block->escapeHtml($job->getData('finished_at')) ?></td>
+                <td>
+                    <?php
+                    $startedAt = $job->getData('started_at');
+                    $finishedAt = $job->getData('finished_at');
+                    $duration = $startedAt && $finishedAt
+                        ? max(0, strtotime($finishedAt) - strtotime($startedAt))
+                        : null;
+                    ?>
+                    <?= $duration === null ? '-' : $block->escapeHtml(gmdate('H:i:s', $duration)) ?>
+                </td>
+                <td class="job-message"><?= $block->escapeHtml($job->getData('message')) ?></td>
+                <td><?= $block->escapeHtml($job->getData('error_message')) ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<script>
+require(['jquery'], function ($) {
+    'use strict';
+
+    var statusUrl = <?= /* @noEscape */ json_encode($statusUrl) ?>;
+    var scheduleUrl = <?= /* @noEscape */ json_encode($scheduleUrl) ?>;
+    var formKey = <?= /* @noEscape */ json_encode($formKey) ?>;
+    var activePolls = {};
+    var indexerSelector = '[data-bind*="gdw_asyncindex_indexer_listing"] input[type="checkbox"]';
+
+    function selectedIndexers() {
+        return $(indexerSelector + ':checked').filter(function () {
+            return this.value !== 'on';
+        }).map(function () {
+            return this.value;
+        }).get();
+    }
+
+    function showMessage(message, isError) {
+        $('#gdw-async-index-message')
+            .toggleClass('message-error', !!isError)
+            .toggleClass('message-success', !isError)
+            .text(message)
+            .prop('hidden', false);
+    }
+
+    function updateProgress(data) {
+        var progress = Math.max(0, Math.min(100, parseInt(data.progress, 10) || 0));
+        var status = data.status || '';
+        var currentIndexer = data.current_indexer || '';
+
+        $('#gdw-async-index-progress')
+            .prop('hidden', false)
+            .toggleClass('message-error', status === 'failed');
+        $('#gdw-async-index-progress-value').text(progress + '%');
+        $('#gdw-async-index-progress-bar')
+            .css('width', progress + '%')
+            .attr('aria-valuenow', progress);
+        $('#gdw-async-index-progress-status').text(status);
+        $('#gdw-async-index-progress-indexer').text(
+            currentIndexer ? 'Indexer: ' + currentIndexer : ''
+        );
+        $('#gdw-async-index-progress-message').text(
+            data.message || data.error_message || ''
+        );
+    }
+
+    function poll(jobId) {
+        if (activePolls[jobId]) {
+            return;
+        }
+        activePolls[jobId] = window.setInterval(function () {
+            $.getJSON(statusUrl, {job_id: jobId}, function (data) {
+                var row = $('[data-job-id="' + jobId + '"]');
+                if (!data.success) {
+                    return;
+                }
+                row.find('.job-status').text(data.status);
+                row.find('.job-progress').text(data.progress + '%');
+                row.find('.job-message').text(data.message);
+                updateProgress(data);
+                if (data.status === 'completed' || data.status === 'failed') {
+                    window.clearInterval(activePolls[jobId]);
+                    delete activePolls[jobId];
+                    showMessage(data.message || data.error_message, data.status === 'failed');
+                }
+            });
+        }, 3000);
+    }
+
+    function schedule(actionType, indexersOverride) {
+        var indexers = indexersOverride || selectedIndexers();
+        if (!indexers.length) {
+            showMessage('<?= $block->escapeJs(__('Select at least one indexer.')) ?>', true);
+            return;
+        }
+
+        $.post(scheduleUrl, {
+            form_key: formKey,
+            indexers: indexers,
+            action_type: actionType,
+            priority: $('#gdw-async-index-priority').val() || 10
+        }, function (data) {
+            if (!data.success) {
+                showMessage(data.message, true);
+                return;
+            }
+            showMessage(data.message, false);
+            updateProgress({
+                status: 'pending',
+                progress: 0,
+                message: data.message,
+                current_indexer: ''
+            });
+            var row = $('<tr>').attr('data-job-id', data.job_id);
+            $('<td>').text(data.job_id).appendTo(row);
+            $('<td>').text(actionType).appendTo(row);
+            $('<td>').text(indexers.join(', ')).appendTo(row);
+            $('<td>').addClass('job-status').text('pending').appendTo(row);
+            $('<td>').addClass('job-progress').text('0%').appendTo(row);
+            $('<td>').text(new Date().toISOString()).appendTo(row);
+            $('<td>').text('-').appendTo(row);
+            $('<td>').text('-').appendTo(row);
+            $('<td>').text('-').appendTo(row);
+            $('<td>').addClass('job-message').text(data.message).appendTo(row);
+            $('<td>').text('').appendTo(row);
+            $('#gdw-async-index-history').prepend(row);
+            poll(data.job_id);
+        }, 'json').fail(function (xhr) {
+            showMessage(xhr.responseJSON && xhr.responseJSON.message
+                ? xhr.responseJSON.message
+                : 'Unable to queue the reindexing job.', true);
+        });
+    }
+
+    $('#gdw-async-index-process').on('click', function () {
+        schedule($('#gdw-async-index-action').val());
+    });
+    $('#gdw-async-index-full').on('click', function () {
+        var allIndexers = $(indexerSelector).filter(function () {
+            return this.value !== 'on';
+        }).map(function () {
+            return this.value;
+        }).get();
+        schedule('full', allIndexers);
+    });
+    $('#gdw-async-index-progress-close').on('click', function () {
+        $('#gdw-async-index-progress').prop('hidden', true);
+    });
+
+    var activeProgress = $('#gdw-async-index-progress');
+    var activeJobId = activeProgress.data('job-id');
+    if (activeJobId) {
+        updateProgress({
+            status: activeProgress.data('status'),
+            progress: activeProgress.data('progress'),
+            message: activeProgress.data('message'),
+            current_indexer: activeProgress.data('current-indexer')
+        });
+        poll(activeJobId);
+    }
+});
+</script>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="GDW_AsyncIndex::index"
+             title="Async Index Management"
+             module="GDW_AsyncIndex"
+             sortOrder="35"
+             parent="Magento_Backend::system_tools"
+             action="gdw_asyncindex/index/index"
+             resource="GDW_AsyncIndex::index"/>
+    </menu>
+</config>

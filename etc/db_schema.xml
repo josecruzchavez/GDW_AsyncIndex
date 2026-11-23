@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="gdw_async_index_job" resource="default" engine="innodb" comment="GDW Async Index Jobs">
+        <column xsi:type="int" name="job_id" unsigned="true" nullable="false" identity="true" comment="Job ID"/>
+        <column xsi:type="text" name="indexer_ids" nullable="false" comment="Indexer IDs JSON"/>
+        <column xsi:type="varchar" name="action_type" length="32" nullable="false" default="full" comment="Action Type"/>
+        <column xsi:type="smallint" name="priority" nullable="false" default="10" comment="Queue Priority"/>
+        <column xsi:type="varchar" name="status" length="32" nullable="false" default="pending" comment="Status"/>
+        <column xsi:type="smallint" name="progress" unsigned="true" nullable="false" default="0" comment="Progress"/>
+        <column xsi:type="smallint" name="retry_count" unsigned="true" nullable="false" default="0" comment="Retry Count"/>
+        <column xsi:type="varchar" name="current_indexer" length="255" nullable="true" comment="Current Indexer"/>
+        <column xsi:type="text" name="message" nullable="true" comment="Message"/>
+        <column xsi:type="text" name="error_message" nullable="true" comment="Error Message"/>
+        <column xsi:type="text" name="metrics" nullable="true" comment="Execution Metrics JSON"/>
+        <column xsi:type="varchar" name="source" length="32" nullable="false" default="manual" comment="Job Source"/>
+        <column xsi:type="int" name="schedule_id" unsigned="true" nullable="true" comment="Reindex Schedule ID"/>
+        <column xsi:type="int" name="created_by" unsigned="true" nullable="true" comment="Admin User ID"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="started_at" nullable="true" comment="Started At"/>
+        <column xsi:type="timestamp" name="finished_at" nullable="true" comment="Finished At"/>
+        <column xsi:type="timestamp" name="last_activity_at" nullable="true" comment="Last Activity At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="job_id"/>
+        </constraint>
+        <index referenceId="GDW_ASYNC_INDEX_JOB_STATUS" indexType="btree">
+            <column name="status"/>
+        </index>
+        <index referenceId="GDW_ASYNC_INDEX_JOB_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
+        <index referenceId="GDW_ASYNC_INDEX_JOB_PRIORITY" indexType="btree">
+            <column name="priority"/>
+        </index>
+        <index referenceId="GDW_ASYNC_INDEX_JOB_SOURCE" indexType="btree">
+            <column name="source"/>
+        </index>
+    </table>
+</schema>

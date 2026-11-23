@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">gdw_asyncindex_indexer_listing.gdw_asyncindex_indexer_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>gdw_asyncindex_indexer_columns</spinner>
+        <deps>
+            <dep>gdw_asyncindex_indexer_listing.gdw_asyncindex_indexer_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="gdw_asyncindex_indexer_listing_data_source"
+                component="Magento_Ui/js/grid/provider">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">GDW\AsyncIndex\Ui\Component\Listing\IndexerDataProvider</argument>
+            <argument name="name" xsi:type="string">gdw_asyncindex_indexer_listing_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+        </argument>
+        <settings>
+            <updateUrl path="mui/index/render"/>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+        </settings>
+    </dataSource>
+    <listingToolbar name="listing_top">
+    </listingToolbar>
+    <columns name="gdw_asyncindex_indexer_columns">
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="title">
+            <settings>
+                <label translate="true">Indexer</label>
+                <filter>text</filter>
+            </settings>
+        </column>
+        <column name="status">
+            <settings>
+                <label translate="true">Status</label>
+                <filter>text</filter>
+            </settings>
+        </column>
+        <column name="pending">
+            <settings>
+                <label translate="true">Pending Items</label>
+                <filter>range</filter>
+            </settings>
+        </column>
+    </columns>
+</listing>

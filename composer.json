@@ -1,0 +1,27 @@
+{
+  "name": "gdw/asyncindex",
+  "description": "Asynchronous index management for Magento 2",
+  "type": "magento2-module",
+  "version": "4.4.0",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Gestión Digital Web",
+      "homepage": "https://gdw.mx",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=8.1",
+    "gdw/core": "^4.4",
+    "magento/framework": ">=103.0.4 <104.0.0"
+  },
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "GDW\\AsyncIndex\\": ""
+    }
+  }
+}
