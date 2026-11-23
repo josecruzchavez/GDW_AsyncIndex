@@ -9,11 +9,8 @@ administrador.
 ## Compatibilidad
 
 - Rama 4.4.x: Magento 2.4.4+ con PHP 8.1+
-- Rama 4.x: Magento 2.4.2 a 2.4.3 con PHP 7.4
+- Rama 4.x: Magento 2.4.0 a 2.4.3 con PHP 7.4
 - Rama 3.x: Magento 2.3.7 con PHP 7.4
-
-La rama 4.x comienza en Magento 2.4.2 porque GDW_Core 4.x requiere
-`magento/framework >=103.0.0`.
 
 ## Funciones destacadas
 
